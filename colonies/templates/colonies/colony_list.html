@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Bee Colonies | HoneyChain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-cocoa font-display tracking-tight">
+        Bee Colonies
+      </h1>
+      <p class="text-cocoa-soft text-sm mt-1">
+        Monitor hive populations, colony subspecies, and health status.
+      </p>
+    </div>
+    <a href="{% url 'colonies:add' %}" class="inline-flex items-center gap-2 bg-honey hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 w-fit">
+      <span>+</span> Record colony
+    </a>
+  </div>
+
+  {% if colonies %}
+  <div class="bg-card border border-line rounded-3xl p-6 sm:p-8 card-shadow overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="text-xs font-bold text-cocoa-soft border-b border-line/60">
+            <th class="pb-3 font-semibold">Colony name</th>
+            <th class="pb-3 font-semibold">Apiary</th>
+            <th class="pb-3 font-semibold">Bee type</th>
+            <th class="pb-3 font-semibold">Established</th>
+            <th class="pb-3 font-semibold">Health status</th>
+            <th class="pb-3 font-semibold text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-line/40">
+          {% for colony in colonies %}
+          <tr class="group hover:bg-cream/40 transition-colors">
+            <td class="py-4 font-bold text-cocoa">
+              {{ colony.colony_name }}
+            </td>
+            <td class="py-4 text-cocoa-soft text-xs sm:text-sm">
+              🏡 {{ colony.apiary.name }}
+            </td>
+            <td class="py-4 text-cocoa-soft text-xs sm:text-sm">
+              {{ colony.colony_type }}
+            </td>
+            <td class="py-4 text-cocoa-soft text-xs sm:text-sm">
+              {{ colony.establishment_date|date:"d M Y" }}
+            </td>
+            <td class="py-4">
+              <span class="inline-flex items-center gap-1 text-xs px-2.5 py-0.5 rounded-full font-bold
+                {% if colony.health_status == 'Excellent' %}bg-green-100 text-green-800
+                {% elif colony.health_status == 'Good' %}bg-gold-tint text-cocoa
+                {% elif colony.health_status == 'Fair' %}bg-peach-tint text-cocoa
+                {% else %}bg-red-100 text-red-800{% endif %}">
+                ● {{ colony.health_status }}
+              </span>
+            </td>
+            <td class="py-4 text-right">
+              <div class="inline-flex items-center gap-2">
+                <a href="{% url 'colonies:edit' colony.pk %}" class="text-xs font-bold text-honey hover:underline">
+                  Edit
+                </a>
+                <span class="text-line">•</span>
+                <a href="{% url 'colonies:delete' colony.pk %}" class="text-xs font-bold text-red-500 hover:underline">
+                  Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="bg-card border border-line rounded-3xl p-12 text-center max-w-lg mx-auto">
+    <div class="w-16 h-16 rounded-full bg-gold-tint mx-auto flex items-center justify-center text-3xl mb-4">
+      🐝
+    </div>
+    <h3 class="text-xl font-bold text-cocoa font-display mb-2">No colonies recorded</h3>
+    <p class="text-xs text-cocoa-soft mb-6">Log your hives inside an apiary to track bee health.</p>
+    <a href="{% url 'colonies:add' %}" class="inline-flex items-center gap-2 bg-honey text-white font-bold text-sm px-6 py-3 rounded-full">
+      + Record your first colony
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

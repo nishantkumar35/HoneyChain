@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sign in | HoneyChain{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md bg-card border border-line rounded-3xl p-8 sm:p-10 card-shadow relative overflow-hidden animate-fade-in-up">
+
+    <!-- Exported Figma Little Bee in top right -->
+    <div class="absolute top-5 right-5 w-8 h-8 animate-buzz">
+      <img src="{% static 'images/bee.png' %}" alt="Cute Bee" class="w-full h-full object-contain">
+    </div>
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center text-xl mb-4">
+        🍯
+      </div>
+      <h1 class="text-3xl font-bold text-cocoa font-display">Welcome back</h1>
+      <p class="text-xs text-cocoa-soft mt-1">Sign in to manage your apiaries and honey batches.</p>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" novalidate class="space-y-4">
+      {% csrf_token %}
+
+      {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-cocoa mb-1.5">
+          {{ field.label }}
+        </label>
+        {{ field }}
+        {% if field.errors %}
+        <p class="text-xs text-red-500 font-semibold mt-1">{{ field.errors.0 }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <div class="pt-3">
+        <button type="submit" class="w-full bg-honey hover:bg-orange-600 text-white font-bold text-sm py-3.5 rounded-full shadow-xs hover:shadow transition-all hover:scale-[1.01] active:scale-95">
+          Sign in to HoneyChain
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-8 pt-6 border-t border-line/60 text-center">
+      <p class="text-xs text-cocoa-soft">
+        New to HoneyChain?
+        <a href="{% url 'accounts:register' %}" class="font-bold text-honey-deep hover:underline">
+          Create an account
+        </a>
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

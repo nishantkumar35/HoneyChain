@@ -1,0 +1,43 @@
+# HoneyChain — Git Ignore
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+ENV/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# Secrets — NEVER commit these
+.env
+
+# Node (Hardhat)
+node_modules/
+smart_contract/node_modules/
+
+# Hardhat artifacts & cache
+smart_contract/artifacts/
+smart_contract/cache/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+

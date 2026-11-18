@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}My Apiaries | HoneyChain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-cocoa font-display tracking-tight">
+        My Apiaries
+      </h1>
+      <p class="text-cocoa-soft text-sm mt-1">
+        Manage your registered farm locations and active apiaries.
+      </p>
+    </div>
+    <a href="{% url 'apiaries:add' %}" class="inline-flex items-center gap-2 bg-honey hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 w-fit">
+      <span>+</span> Add apiary
+    </a>
+  </div>
+
+  {% if apiaries %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for apiary in apiaries %}
+    <div class="bg-card border border-line rounded-3xl p-6 card-shadow card-shadow-hover flex flex-col justify-between">
+      <div>
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center shrink-0 text-xl">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+              <polygon points="12,2 21,7 21,17 12,22 3,17 3,7"/>
+            </svg>
+          </div>
+          <span class="text-xs font-mono font-bold text-cocoa-soft bg-cream px-2.5 py-1 rounded-full border border-line">
+            AP-{{ apiary.pk|stringformat:"03d" }}
+          </span>
+        </div>
+
+        <h3 class="text-lg font-bold text-cocoa font-display">{{ apiary.name }}</h3>
+        <p class="text-xs text-cocoa-soft mt-1">📍 {{ apiary.location }}</p>
+
+        {% if apiary.description %}
+        <p class="text-xs text-cocoa-soft mt-3 line-clamp-2 leading-relaxed">
+          {{ apiary.description }}
+        </p>
+        {% endif %}
+
+        <div class="flex items-center gap-4 text-xs font-semibold text-cocoa-soft mt-5 pt-4 border-t border-line/60">
+          <span>🐝 {{ apiary.get_colony_count }} colonies</span>
+          <span>🍯 {{ apiary.get_batch_count }} batches</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 mt-6 pt-2">
+        <a href="{% url 'apiaries:detail' apiary.pk %}" class="flex-1 text-center bg-cream hover:bg-white text-cocoa text-xs font-bold py-2.5 rounded-full border border-line transition-all">
+          View details
+        </a>
+        <a href="{% url 'apiaries:edit' apiary.pk %}" class="px-4 py-2.5 bg-card hover:bg-cream text-honey font-bold text-xs rounded-full border border-line transition-all">
+          Edit
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="bg-card border border-line rounded-3xl p-12 text-center max-w-lg mx-auto">
+    <div class="w-16 h-16 rounded-full bg-gold-tint mx-auto flex items-center justify-center text-3xl mb-4">
+      🏡
+    </div>
+    <h3 class="text-xl font-bold text-cocoa font-display mb-2">No apiaries registered yet</h3>
+    <p class="text-xs text-cocoa-soft mb-6">Create your first hive location to start tracking colonies and honey batches.</p>
+    <a href="{% url 'apiaries:add' %}" class="inline-flex items-center gap-2 bg-honey text-white font-bold text-sm px-6 py-3 rounded-full">
+      + Add your first apiary
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+/*
+ * HoneyChain — Style Guide & Design System
+ * "Warm, organic and trustworthy. Orange is for actions, yellow is for verification, cocoa is for reading."
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  /* Exact Style Guide Hex Values */
+  --color-peach:      #F6A887; /* Outer frame, page highlights */
+  --color-cream:      #FBE8D9; /* Main page background */
+  --color-honey:      #F16C2F; /* Primary buttons, active bar (Actions) */
+  --color-cocoa:      #573A34; /* Headings, text, feature panels (Reading) */
+  --color-gold:       #F8C928; /* Icons, verified status, decoration (Verification) */
+  --color-card:       #FFFBFA; /* Cards and table surfaces */
+  --color-cocoa-soft: #7A5A52; /* Secondary text */
+  --color-honey-deep: #A83F0B; /* Small links and active nav text */
+  --color-peach-tint: #FBD9CB; /* Icon chips, pending badge */
+  --color-gold-tint:  #FDF0B8; /* Verified highlights */
+  --color-line:       #E9D3BF; /* Dividers and card borders */
+  --color-white:      #FFFFFF; /* Text on orange, QR background */
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-cocoa);
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', Courier, monospace;
+}
+
+/* Card and surfaces */
+.bg-card-surface {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-line);
+}
+
+.card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(87, 58, 52, 0.05), 0 2px 6px -1px rgba(87, 58, 52, 0.03);
+}
+
+.card-shadow-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+.card-shadow-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -4px rgba(87, 58, 52, 0.10), 0 4px 10px -2px rgba(87, 58, 52, 0.05);
+}
+
+/* Animations */
+@keyframes beeFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes beeBuzz {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(2px, -3px) rotate(3deg);
+  }
+  40% {
+    transform: translate(-2px, 1px) rotate(-2deg);
+  }
+  60% {
+    transform: translate(1px, -4px) rotate(2deg);
+  }
+  80% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.9;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: beeFloat 4s ease-in-out infinite;
+}
+
+.animate-buzz {
+  animation: beeBuzz 2.5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-peach);
+}
+
+/* Print Stylesheet for honey jar labels */
+@media print {
+  body {
+    background: white !important;
+  }
+  nav, footer, .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard | HoneyChain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- ==================== HEADER WITH FIGMA EXPORTED BEE FLIGHT PATH ==================== -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 relative">
+    <div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cocoa font-display tracking-tight">
+        Good morning, {{ user.first_name|default:user.username }}
+      </h1>
+      <p class="text-cocoa-soft text-base mt-2">
+        Here is how your apiaries and honey batches are doing today.
+      </p>
+    </div>
+
+    <!-- Exact Figma Exported Bee Flight Path Asset with gentle floating animation -->
+    <div class="hidden sm:block shrink-0 animate-float pointer-events-none pr-2">
+      <img src="{% static 'images/bee-flight-path.png' %}"
+           alt="Bee with dotted flight trajectory"
+           class="h-16 w-auto object-contain">
+    </div>
+  </div>
+
+  <!-- ==================== QUICK ACTIONS ==================== -->
+  <div class="mb-10">
+    <h2 class="text-xs font-bold text-cocoa-soft uppercase tracking-wider mb-4">Quick actions</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+      <!-- Action 1: Add Apiary -->
+      <div class="bg-card border border-line rounded-3xl p-6 card-shadow card-shadow-hover flex flex-col justify-between">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center shrink-0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+              <polygon points="12,2 21,7 21,17 12,22 3,17 3,7"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-cocoa font-display">Add an apiary</h3>
+            <p class="text-xs text-cocoa-soft mt-0.5">Register a new hive location.</p>
+          </div>
+        </div>
+        <a href="{% url 'apiaries:add' %}" class="inline-flex items-center justify-center gap-1.5 bg-honey hover:bg-orange-600 text-white font-bold text-xs py-2.5 px-5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 w-fit">
+          + Add apiary
+        </a>
+      </div>
+
+      <!-- Action 2: Record Colony -->
+      <div class="bg-card border border-line rounded-3xl p-6 card-shadow card-shadow-hover flex flex-col justify-between">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center shrink-0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-cocoa font-display">Record a colony</h3>
+            <p class="text-xs text-cocoa-soft mt-0.5">Log a colony inside one of your apiaries.</p>
+          </div>
+        </div>
+        <a href="{% url 'colonies:add' %}" class="inline-flex items-center justify-center gap-1.5 bg-honey hover:bg-orange-600 text-white font-bold text-xs py-2.5 px-5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 w-fit">
+          + Record colony
+        </a>
+      </div>
+
+      <!-- Action 3: Create Batch -->
+      <div class="bg-card border border-line rounded-3xl p-6 card-shadow card-shadow-hover flex flex-col justify-between">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center shrink-0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+              <rect x="5" y="6" width="14" height="15" rx="3"/>
+              <line x1="8" y1="3" x2="16" y2="3"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-cocoa font-display">Create a honey batch</h3>
+            <p class="text-xs text-cocoa-soft mt-0.5">Save a new harvest and get its QR code.</p>
+          </div>
+        </div>
+        <a href="{% url 'honey:create' %}" class="inline-flex items-center justify-center gap-1.5 bg-honey hover:bg-orange-600 text-white font-bold text-xs py-2.5 px-5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 w-fit">
+          + Create batch
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== STATS ROW (4 CARDS) ==================== -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-10">
+
+    <!-- Stat 1: Total Apiaries -->
+    <div class="bg-card border border-line rounded-3xl p-6 card-shadow">
+      <div class="flex items-center gap-2 mb-3 text-cocoa-soft text-xs font-semibold">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+          <polygon points="12,2 21,7 21,17 12,22 3,17 3,7"/>
+        </svg>
+        <span>Total apiaries</span>
+      </div>
+      <p class="text-3xl sm:text-4xl font-extrabold text-cocoa font-display">{{ total_apiaries|default:"0" }}</p>
+      <p class="text-xs text-cocoa-soft mt-2">Active hive locations</p>
+    </div>
+
+    <!-- Stat 2: Bee Colonies -->
+    <div class="bg-card border border-line rounded-3xl p-6 card-shadow">
+      <div class="flex items-center gap-2 mb-3 text-cocoa-soft text-xs font-semibold">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        </svg>
+        <span>Bee colonies</span>
+      </div>
+      <p class="text-3xl sm:text-4xl font-extrabold text-cocoa font-display">{{ total_colonies|default:"0" }}</p>
+      <p class="text-xs text-cocoa-soft mt-2">Managed colonies</p>
+    </div>
+
+    <!-- Stat 3: Honey Batches -->
+    <div class="bg-card border border-line rounded-3xl p-6 card-shadow">
+      <div class="flex items-center gap-2 mb-3 text-cocoa-soft text-xs font-semibold">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#573A34" stroke-width="2">
+          <rect x="5" y="6" width="14" height="15" rx="3"/>
+          <line x1="8" y1="3" x2="16" y2="3"/>
+        </svg>
+        <span>Honey batches</span>
+      </div>
+      <p class="text-3xl sm:text-4xl font-extrabold text-cocoa font-display">{{ total_batches|default:"0" }}</p>
+      <p class="text-xs text-cocoa-soft mt-2">Recorded harvests</p>
+    </div>
+
+    <!-- Stat 4: Verified Batches (Gold Accent Card from Style Guide & Image 1) -->
+    <div class="bg-card border-2 border-gold rounded-3xl p-6 card-shadow relative overflow-hidden">
+      <div class="flex items-center gap-2 mb-3 text-cocoa text-xs font-bold">
+        <div class="w-5 h-5 rounded-full bg-gold text-cocoa flex items-center justify-center text-xs font-bold">
+          ✓
+        </div>
+        <span>Verified batches</span>
+      </div>
+      <p class="text-3xl sm:text-4xl font-extrabold text-cocoa font-display">{{ verified_batches|default:"0" }}</p>
+
+      <!-- Gold Progress bar matching Image 1 -->
+      <div class="w-full bg-gold-tint h-2 rounded-full overflow-hidden mt-3">
+        <div class="bg-gold h-full rounded-full transition-all duration-1000" style="width: {% if total_batches %}{% widthratio verified_batches total_batches 100 %}{% else %}0{% endif %}%;"></div>
+      </div>
+      <p class="text-xs text-cocoa-soft mt-2 font-medium">
+        {% if total_batches %}{% widthratio verified_batches total_batches 100 %}% on blockchain{% else %}Awaiting registration{% endif %}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ==================== MAIN CONTENT GRID (RECENT BATCHES + ACTIVITY) ==================== -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- Left Column: Recent Honey Batches Table with Honeycomb Watermark (8 cols) -->
+    <div class="lg:col-span-8 bg-card border border-line rounded-3xl p-6 sm:p-8 card-shadow relative overflow-hidden">
+
+      <!-- Exact Figma Exported Honeycomb Watermark in bottom-right corner -->
+      <div class="absolute -right-2 -bottom-2 w-32 h-32 opacity-80 pointer-events-none">
+        <img src="{% static 'images/honeycomb-watermark.png' %}"
+             alt="Honeycomb watermark"
+             class="w-full h-full object-contain">
+      </div>
+
+      <!-- Table Header -->
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-line/60">
+        <h2 class="text-xl font-bold text-cocoa font-display">Recent honey batches</h2>
+        <a href="{% url 'honey:list' %}" class="text-xs font-bold text-honey-deep hover:underline flex items-center gap-1">
+          View all batches <span>→</span>
+        </a>
+      </div>
+
+      <!-- Batches Table -->
+      {% if recent_batches %}
+      <div class="overflow-x-auto relative z-10">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="text-xs font-bold text-cocoa-soft border-b border-line/40">
+              <th class="pb-3 font-semibold">Batch ID</th>
+              <th class="pb-3 font-semibold">Harvest date</th>
+              <th class="pb-3 font-semibold">Quantity</th>
+              <th class="pb-3 font-semibold">Source</th>
+              <th class="pb-3 font-semibold text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line/40">
+            {% for batch in recent_batches %}
+            <tr class="group hover:bg-cream/40 transition-colors">
+              <td class="py-4 font-mono font-bold text-cocoa text-xs">
+                <a href="{% url 'honey:detail' batch.pk %}" class="hover:text-honey hover:underline">
+                  {{ batch.batch_id }}
+                </a>
+              </td>
+              <td class="py-4 text-cocoa-soft text-xs sm:text-sm">
+                {{ batch.harvest_date|date:"d M Y" }}
+              </td>
+              <td class="py-4 text-cocoa font-medium text-xs sm:text-sm">
+                {{ batch.quantity }} kg
+              </td>
+              <td class="py-4 text-cocoa-soft text-xs sm:text-sm truncate max-w-[140px]">
+                {{ batch.apiary.name }}
+              </td>
+              <td class="py-4 text-right">
+                {% if batch.is_registered_on_blockchain %}
+                <span class="inline-flex items-center gap-1 bg-gold text-cocoa font-bold text-xs px-2.5 py-1 rounded-full shadow-2xs">
+                  <span>✓</span> Verified
+                </span>
+                {% else %}
+                <span class="inline-flex items-center gap-1 bg-peach-tint text-cocoa font-bold text-xs px-2.5 py-1 rounded-full">
+                  <span>⏱</span> Pending
+                </span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="py-12 text-center relative z-10">
+        <p class="text-sm text-cocoa-soft">No batches created yet.</p>
+        <a href="{% url 'honey:create' %}" class="inline-block mt-3 text-xs font-bold text-honey hover:underline">
+          + Create your first honey batch
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Right Column: Recent Activity Feed (4 cols) -->
+    <div class="lg:col-span-4 bg-card border border-line rounded-3xl p-6 sm:p-7 card-shadow flex flex-col justify-between">
+      <div>
+        <h2 class="text-xl font-bold text-cocoa font-display mb-6 pb-4 border-b border-line/60">
+          Recent activity
+        </h2>
+
+        <div class="space-y-5 text-sm">
+
+          <!-- Activity 1: Blockchain Verified -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-gold text-cocoa flex items-center justify-center shrink-0 text-xs font-bold">
+              ✓
+            </div>
+            <div>
+              <p class="text-xs font-bold text-cocoa">
+                Batch verification check on blockchain
+              </p>
+              <p class="text-[11px] text-cocoa-soft mt-0.5">Automated node monitor</p>
+            </div>
+          </div>
+
+          <!-- Activity 2: Apiary status -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-gold-tint text-cocoa flex items-center justify-center shrink-0 text-xs">
+              🏡
+            </div>
+            <div>
+              <p class="text-xs font-bold text-cocoa">
+                {{ total_apiaries }} apiary locations active
+              </p>
+              <p class="text-[11px] text-cocoa-soft mt-0.5">Healthy floral coverage</p>
+            </div>
+          </div>
+
+          <!-- Activity 3: Colony health -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-peach-tint text-cocoa flex items-center justify-center shrink-0 text-xs">
+              🐝
+            </div>
+            <div>
+              <p class="text-xs font-bold text-cocoa">
+                {{ total_colonies }} bee colonies inspected
+              </p>
+              <p class="text-[11px] text-cocoa-soft mt-0.5">Updated this season</p>
+            </div>
+          </div>
+
+          <!-- Activity 4: Batch QR Scan -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-cream text-cocoa border border-line flex items-center justify-center shrink-0 text-xs">
+              ☵
+            </div>
+            <div>
+              <p class="text-xs font-bold text-cocoa">
+                QR traceability ready for jars
+              </p>
+              <p class="text-[11px] text-cocoa-soft mt-0.5">Public verification online</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Link to All Batches -->
+      <div class="pt-6 border-t border-line/60 mt-6">
+        <a href="{% url 'honey:list' %}" class="w-full block text-center bg-cream hover:bg-peach-tint text-cocoa font-bold text-xs py-3 rounded-full border border-line transition-all">
+          Manage all honey batches
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

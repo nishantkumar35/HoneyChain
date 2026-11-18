@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}About | HoneyChain{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+
+  <!-- Header -->
+  <div class="text-center mb-12">
+    <div
+      class="inline-flex items-center gap-2 bg-card border border-line px-3.5 py-1.5 rounded-full text-xs font-bold text-cocoa-soft shadow-xs mb-3">
+      <span>🍯</span> Transparent Honey Traceability
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-bold text-cocoa font-display tracking-tight">
+      About HoneyChain
+    </h1>
+    <p class="text-cocoa-soft text-base mt-2 max-w-xl mx-auto">
+      A blockchain-based honey traceability and smart beekeeping management system.
+    </p>
+  </div>
+
+  <!-- Mission Card -->
+  <div
+    class="bg-card border border-line rounded-4xl p-8 sm:p-12 card-shadow mb-8 relative overflow-hidden animate-fade-in-up">
+    <div class="absolute top-6 right-6 text-3xl animate-buzz">
+      🐝
+    </div>
+    <h2 class="text-2xl font-bold text-cocoa font-display mb-4">Our Mission</h2>
+    <p class="text-cocoa-soft text-base leading-relaxed mb-4">
+      Honey is one of the most adulterated foods in the world. Consumers rarely know where their honey was harvested,
+      which floral sources the bees visited, or if the product has been diluted with high-fructose corn syrup.
+    </p>
+    <p class="text-cocoa-soft text-base leading-relaxed">
+      HoneyChain empowers honest beekeepers to register every harvest and record its cryptographic SHA-256 fingerprint
+      on an immutable blockchain. With a simple QR scan on any smartphone, consumers can verify origin, extraction
+      details, and authenticity in seconds.
+    </p>
+  </div>
+
+  <!-- Tech Architecture Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Card 1: Smart Beekeeping -->
+    <div class="bg-card border border-line rounded-3xl p-6 sm:p-8 card-shadow">
+      <div
+        class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center text-xl mb-4">
+        🏡
+      </div>
+      <h3 class="text-xl font-bold text-cocoa font-display mb-2">Smart Beekeeping</h3>
+      <p class="text-xs text-cocoa-soft leading-relaxed mb-4">
+        Track apiary locations, colonies, subspecies, and colony health across multiple seasons in one clean interface.
+      </p>
+      <ul class="text-xs text-cocoa font-semibold space-y-2">
+        <li class="flex items-center gap-2"><span class="text-honey">✓</span> Colony health tracking</li>
+        <li class="flex items-center gap-2"><span class="text-honey">✓</span> Apiary geolocation recording</li>
+        <li class="flex items-center gap-2"><span class="text-honey">✓</span> Harvest yield analytics</li>
+      </ul>
+    </div>
+
+    <!-- Card 2: Ethereum Smart Contract -->
+    <div class="bg-card border border-line rounded-3xl p-6 sm:p-8 card-shadow">
+      <div
+        class="w-12 h-12 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center text-xl mb-4">
+        🔗
+      </div>
+      <h3 class="text-xl font-bold text-cocoa font-display mb-2">Blockchain Integrity</h3>
+      <p class="text-xs text-cocoa-soft leading-relaxed mb-4">
+        Deterministic SHA-256 batch hashes committed to a Solidity smart contract deployed on an Ethereum Hardhat
+        network.
+      </p>
+      <ul class="text-xs text-cocoa font-semibold space-y-2">
+        <li class="flex items-center gap-2"><span class="text-honey">✓</span> Immutable on-chain hashes</li>
+        <li class="flex items-center gap-2"><span class="text-honey">✓</span> Automated tamper detection</li>
+        <li class="flex items-center gap-2"><span class="text-honey">✓</span> Dynamic QR code verification</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

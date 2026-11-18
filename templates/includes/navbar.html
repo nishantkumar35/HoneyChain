@@ -1,0 +1,187 @@
+<!-- HoneyChain Figma Design Navbar -->
+<nav class="bg-cream border-b border-line/60 sticky top-0 z-50 backdrop-blur-md bg-cream/95 transition-all">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+
+      <!-- Logo with Hexagon Icon -->
+      <a href="{% url 'home' %}" class="flex items-center gap-2.5 group">
+        <!-- SVG Hexagon Icon from Figma Design -->
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="14,2 25,8 25,20 14,26 3,20 3,8" fill="#F8C928" stroke="#573A34" stroke-width="2"
+              stroke-linejoin="round" />
+            <polygon points="14,6 21,10 21,18 14,22 7,18 7,10" fill="#FDF0B8" stroke="#573A34" stroke-width="1.5"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+        <span class="font-bold text-xl text-cocoa tracking-tight font-display">
+          HoneyChain
+        </span>
+      </a>
+
+      <!-- Desktop Navigation Links (Center) -->
+      <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-cocoa">
+        <!-- Home -->
+        <a href="{% url 'home' %}"
+          class="relative py-2 transition-colors hover:text-honey-deep {% if request.resolver_match.url_name == 'home' and request.resolver_match.namespace == '' %}text-honey-deep font-bold{% endif %}">
+          Home
+          {% if request.resolver_match.url_name == 'home' and request.resolver_match.namespace == '' %}
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-honey rounded-full"></span>
+          {% endif %}
+        </a>
+
+        <!-- Dashboard -->
+        {% if user.is_authenticated %}
+        <a href="{% url 'accounts:dashboard' %}"
+          class="relative py-2 transition-colors hover:text-honey-deep {% if request.resolver_match.url_name == 'dashboard' %}text-honey-deep font-bold{% endif %}">
+          Dashboard
+          {% if request.resolver_match.url_name == 'dashboard' %}
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-honey rounded-full"></span>
+          {% endif %}
+        </a>
+
+        <!-- Apiaries -->
+        <a href="{% url 'apiaries:list' %}"
+          class="relative py-2 transition-colors hover:text-honey-deep {% if request.resolver_match.app_name == 'apiaries' %}text-honey-deep font-bold{% endif %}">
+          Apiaries
+          {% if request.resolver_match.app_name == 'apiaries' %}
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-honey rounded-full"></span>
+          {% endif %}
+        </a>
+
+        <!-- Honey Batches -->
+        <a href="{% url 'honey:list' %}"
+          class="relative py-2 transition-colors hover:text-honey-deep {% if request.resolver_match.app_name == 'honey' %}text-honey-deep font-bold{% endif %}">
+          Honey Batches
+          {% if request.resolver_match.app_name == 'honey' %}
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-honey rounded-full"></span>
+          {% endif %}
+        </a>
+        {% endif %}
+
+        <!-- Traceability -->
+        <a href="{% url 'traceability:search' %}"
+          class="relative py-2 transition-colors hover:text-honey-deep {% if request.resolver_match.app_name == 'traceability' %}text-honey-deep font-bold{% endif %}">
+          Traceability
+          {% if request.resolver_match.app_name == 'traceability' %}
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-honey rounded-full"></span>
+          {% endif %}
+        </a>
+
+        <!-- About -->
+        <a href="{% url 'about' %}"
+          class="relative py-2 transition-colors hover:text-honey-deep {% if request.resolver_match.url_name == 'about' %}text-honey-deep font-bold{% endif %}">
+          About
+          {% if request.resolver_match.url_name == 'about' %}
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-honey rounded-full"></span>
+          {% endif %}
+        </a>
+      </div>
+
+      <!-- Right Action / User Profile -->
+      <div class="hidden md:flex items-center gap-4">
+        {% if user.is_authenticated %}
+        <!-- User Pill Badge (Figma Style: Initial Avatar + Name) -->
+        <div class="relative group">
+          <button
+            class="flex items-center gap-3 bg-card border border-line pl-2 pr-4 py-1.5 rounded-full hover:border-peach transition-all shadow-sm">
+            <span
+              class="w-8 h-8 rounded-full bg-peach-tint text-cocoa font-bold text-xs flex items-center justify-center">
+              {{ user.first_name.0|default:user.username.0|upper }}{{ user.last_name.0|default:''|upper }}
+            </span>
+            <span class="text-sm font-bold text-cocoa">
+              {{ user.get_full_name|default:user.username }}
+            </span>
+            <span class="text-cocoa-soft text-xs">▾</span>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            class="absolute right-0 top-full mt-2 w-52 bg-card rounded-2xl shadow-xl border border-line py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+            <div class="px-4 py-2 border-b border-line/60">
+              <p class="text-xs text-cocoa-soft">Signed in as</p>
+              <p class="text-sm font-bold text-cocoa truncate">{{ user.email|default:user.username }}</p>
+            </div>
+            <a href="{% url 'accounts:dashboard' %}"
+              class="flex items-center gap-2 px-4 py-2 text-sm text-cocoa hover:bg-cream">
+              <span>📊</span> Dashboard
+            </a>
+            <a href="{% url 'accounts:profile' %}"
+              class="flex items-center gap-2 px-4 py-2 text-sm text-cocoa hover:bg-cream">
+              <span>⚙️</span> Account Profile
+            </a>
+            <div class="border-t border-line/60 my-1"></div>
+            <form method="POST" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit"
+                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
+                <span>🚪</span> Log out
+              </button>
+            </form>
+          </div>
+        </div>
+        {% else %}
+        <!-- Guest CTA Button (Figma Style: Start Tracking in Orange Pill) -->
+        <a href="{% url 'accounts:register' %}"
+          class="bg-honey hover:bg-orange-600 text-white font-bold text-sm px-6 py-2.5 rounded-full shadow-sm hover:shadow transition-all hover:scale-[1.02] active:scale-95">
+          Start tracking
+        </a>
+        <a href="{% url 'accounts:login' %}" class="text-sm font-semibold text-cocoa hover:text-honey-deep px-3 py-2">
+          Sign in
+        </a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 text-cocoa hover:text-honey focus:outline-none"
+        aria-label="Toggle Navigation">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="md:hidden hidden pb-6 pt-2 border-t border-line/60">
+      <div class="flex flex-col space-y-2 text-base font-semibold text-cocoa">
+        <a href="{% url 'home' %}" class="px-3 py-2 rounded-xl hover:bg-card">Home</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'accounts:dashboard' %}" class="px-3 py-2 rounded-xl hover:bg-card">Dashboard</a>
+        <a href="{% url 'apiaries:list' %}" class="px-3 py-2 rounded-xl hover:bg-card">Apiaries</a>
+        <a href="{% url 'honey:list' %}" class="px-3 py-2 rounded-xl hover:bg-card">Honey Batches</a>
+        {% endif %}
+        <a href="{% url 'traceability:search' %}" class="px-3 py-2 rounded-xl hover:bg-card">Traceability</a>
+        <a href="{% url 'about' %}" class="px-3 py-2 rounded-xl hover:bg-card">About</a>
+
+        <div class="pt-4 border-t border-line/60">
+          {% if user.is_authenticated %}
+          <div class="flex items-center gap-3 px-3 py-2 mb-2">
+            <span
+              class="w-8 h-8 rounded-full bg-peach-tint text-cocoa font-bold text-xs flex items-center justify-center">
+              {{ user.first_name.0|default:user.username.0|upper }}
+            </span>
+            <span class="text-sm font-bold text-cocoa">{{ user.get_full_name|default:user.username }}</span>
+          </div>
+          <form method="POST" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button type="submit"
+              class="w-full text-left px-3 py-2 text-sm text-red-600 font-bold hover:bg-red-50 rounded-xl">
+              Log out
+            </button>
+          </form>
+          {% else %}
+          <a href="{% url 'accounts:register' %}"
+            class="block text-center bg-honey text-white font-bold py-3 rounded-full mb-2">
+            Start tracking
+          </a>
+          <a href="{% url 'accounts:login' %}" class="block text-center text-sm font-semibold text-cocoa py-2">
+            Sign in
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>

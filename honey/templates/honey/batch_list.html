@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Honey Batches | HoneyChain{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-cocoa font-display tracking-tight">
+        Honey Batches
+      </h1>
+      <p class="text-cocoa-soft text-sm mt-1">
+        Track your harvests from extraction to blockchain verification.
+      </p>
+    </div>
+    <a href="{% url 'honey:create' %}"
+      class="inline-flex items-center gap-2 bg-honey hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 w-fit">
+      <span>+</span> Create honey batch
+    </a>
+  </div>
+
+  {% if batches %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for batch in batches %}
+    <div class="bg-card border border-line rounded-3xl p-6 card-shadow card-shadow-hover flex flex-col justify-between">
+      <div>
+        <div class="flex items-start justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-lg font-bold font-mono text-cocoa">
+              <a href="{% url 'honey:detail' batch.pk %}" class="hover:text-honey hover:underline">
+                {{ batch.batch_id }}
+              </a>
+            </h3>
+            <p class="text-xs text-cocoa-soft mt-0.5">🏡 {{ batch.apiary.name }}</p>
+          </div>
+
+          <!-- Status badge -->
+          {% if batch.is_registered_on_blockchain %}
+          <span
+            class="inline-flex items-center gap-1 bg-gold text-cocoa font-bold text-xs px-2.5 py-1 rounded-full shrink-0">
+            <span>✓</span> Verified
+          </span>
+          {% else %}
+          <span
+            class="inline-flex items-center gap-1 bg-peach-tint text-cocoa font-bold text-xs px-2.5 py-1 rounded-full shrink-0">
+            <span>⏱</span> Pending
+          </span>
+          {% endif %}
+        </div>
+
+        <div class="space-y-2 text-xs py-3 border-y border-line/60 my-4">
+          <div class="flex justify-between">
+            <span class="text-cocoa-soft">Floral Source</span>
+            <span class="font-bold text-cocoa">{{ batch.honey_source }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-cocoa-soft">Quantity</span>
+            <span class="font-bold text-cocoa">{{ batch.quantity }} kg</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-cocoa-soft">Harvest Date</span>
+            <span class="font-semibold text-cocoa">{{ batch.harvest_date|date:"d M Y" }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-cocoa-soft">Batch Status</span>
+            <span class="font-semibold text-cocoa">{{ batch.status }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 mt-2">
+        <a href="{% url 'honey:detail' batch.pk %}"
+          class="flex-1 text-center bg-cream hover:bg-white text-cocoa text-xs font-bold py-2.5 rounded-full border border-line transition-all">
+          View batch details
+        </a>
+        {% if not batch.is_registered_on_blockchain %}
+        <a href="{% url 'honey:edit' batch.pk %}"
+          class="px-4 py-2.5 bg-card hover:bg-cream text-honey font-bold text-xs rounded-full border border-line transition-all">
+          Edit
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="bg-card border border-line rounded-3xl p-12 text-center max-w-lg mx-auto">
+    <div class="w-16 h-16 rounded-full bg-gold-tint mx-auto flex items-center justify-center text-3xl mb-4">
+      🍯
+    </div>
+    <h3 class="text-xl font-bold text-cocoa font-display mb-2">No honey batches recorded</h3>
+    <p class="text-xs text-cocoa-soft mb-6">Create a honey batch to generate its unique batch ID, SHA-256 hash, and
+      customer QR code.</p>
+    <a href="{% url 'honey:create' %}"
+      class="inline-flex items-center gap-2 bg-honey text-white font-bold text-sm px-6 py-3 rounded-full">
+      + Create first batch
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

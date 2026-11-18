@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}HoneyChain{% endblock %} | Transparent Honey Traceability</title>
+  <meta name="description" content="HoneyChain — Know exactly where your honey comes from with blockchain traceability.">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'peach':      '#F6A887',
+            'cream':      '#F8E8D9',
+            'honey':      '#F16C2F',
+            'cocoa':      '#573A34',
+            'gold':       '#F8C928',
+            'card':       '#FFFBFA',
+            'cocoa-soft': '#7A5A52',
+            'honey-deep': '#A83F0B',
+            'peach-tint': '#FBD9CB',
+            'gold-tint':  '#FDF0B8',
+            'line':       '#E9D3BF',
+          },
+          fontFamily: {
+            'display': ['Fraunces', 'Georgia', 'serif'],
+            'sans':    ['Nunito', 'sans-serif'],
+            'mono':    ['JetBrains Mono', 'Courier New', 'monospace'],
+          },
+          borderRadius: {
+            '3xl': '1.5rem',
+            '4xl': '2rem',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Fraunces & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/honeychain.css' %}">
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-cream min-h-screen text-cocoa font-sans antialiased selection:bg-peach-tint selection:text-cocoa">
+
+  <!-- ===================== NAVBAR ===================== -->
+  {% include 'includes/navbar.html' %}
+
+  <!-- ===================== FLASH MESSAGES ===================== -->
+  {% if messages %}
+  <div id="messages-container" class="max-w-6xl mx-auto px-4 pt-4 no-print">
+    {% for message in messages %}
+    <div class="flex items-center gap-3 mb-3 px-5 py-4 rounded-2xl shadow-sm border animate-fade-in-up
+      {% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-900
+      {% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-900
+      {% elif message.tags == 'warning' %}bg-amber-50 border-amber-200 text-amber-900
+      {% else %}bg-card border-line text-cocoa{% endif %}
+    ">
+      <span class="text-xl">
+        {% if message.tags == 'success' %}🍯
+        {% elif message.tags == 'error' %}⚠️
+        {% elif message.tags == 'warning' %}⏳
+        {% else %}ℹ️{% endif %}
+      </span>
+      <span class="flex-1 font-semibold text-sm">{{ message }}</span>
+      <button onclick="this.parentElement.remove()" class="text-cocoa-soft hover:text-cocoa text-xl leading-none">×</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main class="w-full">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  {% include 'includes/footer.html' %}
+
+  <!-- Base JavaScript -->
+  <script src="{% static 'js/honeychain.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

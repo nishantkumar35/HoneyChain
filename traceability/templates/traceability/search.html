@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Verify Honey Batch | HoneyChain Traceability{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-16">
+  <div class="w-full max-w-lg bg-card border border-line rounded-4xl p-8 sm:p-12 card-shadow text-center relative overflow-hidden animate-fade-in-up">
+
+    <!-- Exported Figma Little Bee in top right -->
+    <div class="absolute top-6 right-6 w-8 h-8 animate-buzz">
+      <img src="{% static 'images/bee.png' %}" alt="Cute Bee" class="w-full h-full object-contain">
+    </div>
+
+    <!-- Icon Badge -->
+    <div class="w-16 h-16 rounded-full bg-gold-tint mx-auto flex items-center justify-center text-3xl mb-6 border border-line/60">
+      🔍
+    </div>
+
+    <span class="text-xs font-bold uppercase tracking-wider text-cocoa-soft">Customer Traceability</span>
+    <h1 class="text-3xl sm:text-4xl font-bold text-cocoa font-display mt-2 mb-3">
+      Verify your honey
+    </h1>
+    <p class="text-sm text-cocoa-soft leading-relaxed max-w-sm mx-auto mb-8">
+      Enter the Batch ID found on your honey jar label to view its hive origin and verify its blockchain proof.
+    </p>
+
+    <!-- Search Form -->
+    <form method="GET" class="space-y-4">
+      <div>
+        <input type="text" name="batch_id"
+          value="{{ batch_id }}"
+          placeholder="e.g. HC-2026-0142"
+          class="w-full px-5 py-4 rounded-full border-2 border-line focus:border-honey bg-cream/50 text-cocoa font-mono text-center text-base sm:text-lg font-bold tracking-wider uppercase transition-all shadow-inner outline-none"
+          required
+        >
+      </div>
+
+      <button type="submit" class="w-full bg-honey hover:bg-orange-600 text-white font-bold text-base py-4 rounded-full shadow-md transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2">
+        <span>Verify batch</span> <span>→</span>
+      </button>
+    </form>
+
+    {% if not_found %}
+    <div class="mt-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700">
+      ✕ No batch found with ID: <span class="font-mono font-bold">{{ batch_id }}</span>. Please check the label and try again.
+    </div>
+    {% endif %}
+
+    <div class="mt-8 pt-6 border-t border-line/60">
+      <p class="text-xs text-cocoa-soft">
+        Tip: You can also scan the QR code printed on the jar directly with your phone camera.
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

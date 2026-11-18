@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block title %}Verify {{ batch_id }} | HoneyChain Traceability{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-2 bg-card border border-line px-3.5 py-1.5 rounded-full text-xs font-bold text-cocoa-soft shadow-xs mb-4">
+      <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+      Customer Honey Traceability
+    </div>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cocoa font-display tracking-tight">
+      Batch <span class="font-mono text-honey">{{ batch_id }}</span>
+    </h1>
+    <p class="text-cocoa-soft text-sm sm:text-base mt-2">
+      Verified from hive to jar through blockchain cryptography.
+    </p>
+  </div>
+
+  <!-- Verification Status Banner (Figma Gold/Peach Badge style) -->
+  <div class="mb-8 rounded-3xl p-6 sm:p-7 border card-shadow text-center transition-all animate-fade-in-up
+    {% if verification.status == 'Verified' %}bg-gold-tint/60 border-gold/60
+    {% elif verification.status == 'Verification Failed' %}bg-red-50 border-red-300
+    {% else %}bg-card border-line{% endif %}">
+
+    <div class="w-14 h-14 rounded-full mx-auto flex items-center justify-center text-2xl font-bold mb-3 shadow-xs
+      {% if verification.status == 'Verified' %}bg-gold text-cocoa
+      {% elif verification.status == 'Verification Failed' %}bg-red-500 text-white
+      {% else %}bg-peach-tint text-cocoa{% endif %}">
+      {% if verification.status == 'Verified' %}✓
+      {% elif verification.status == 'Verification Failed' %}✕
+      {% else %}⏱{% endif %}
+    </div>
+
+    <h2 class="text-2xl font-bold font-display
+      {% if verification.status == 'Verified' %}text-cocoa
+      {% elif verification.status == 'Verification Failed' %}text-red-700
+      {% else %}text-cocoa{% endif %}">
+      {{ verification.status }}
+    </h2>
+
+    <p class="text-sm font-medium mt-1.5 max-w-md mx-auto
+      {% if verification.status == 'Verified' %}text-cocoa-soft
+      {% elif verification.status == 'Verification Failed' %}text-red-600
+      {% else %}text-cocoa-soft{% endif %}">
+      {{ verification.message }}
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- Batch Information Card (7 cols) -->
+    <div class="lg:col-span-7 bg-card border border-line rounded-3xl p-6 sm:p-8 card-shadow">
+      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-line/60">
+        <div class="w-10 h-10 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center text-lg">
+          🍯
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-cocoa font-display">Batch information</h3>
+          <p class="text-xs text-cocoa-soft">Origin and harvest record</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-6 text-sm">
+        <div>
+          <p class="text-xs text-cocoa-soft">Floral source</p>
+          <p class="font-bold text-cocoa mt-0.5">🌸 {{ honey_source }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-cocoa-soft">Apiary</p>
+          <p class="font-bold text-cocoa mt-0.5">🏡 {{ apiary_name }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-cocoa-soft">Harvest date</p>
+          <p class="font-semibold text-cocoa mt-0.5">📅 {{ harvest_date|date:"d M Y" }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-cocoa-soft">Total quantity</p>
+          <p class="font-semibold text-cocoa mt-0.5">⚖️ {{ quantity }} kg</p>
+        </div>
+        <div>
+          <p class="text-xs text-cocoa-soft">Production location</p>
+          <p class="font-semibold text-cocoa mt-0.5">📍 {{ location }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-cocoa-soft">Beekeeper</p>
+          <p class="font-semibold text-cocoa mt-0.5">👤 {{ beekeeper_name }}</p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-line/60 flex items-center justify-between">
+        <span class="text-xs text-cocoa-soft">Batch Status</span>
+        <span class="inline-flex items-center gap-1.5 bg-cream border border-line text-cocoa font-bold text-xs px-3.5 py-1.5 rounded-full">
+          {{ status }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Blockchain Proof Card (5 cols - Dark Cocoa Card) -->
+    <div class="lg:col-span-5 bg-cocoa text-cream rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col justify-between">
+      <div>
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-cream/15">
+          <div class="w-10 h-10 rounded-2xl bg-gold text-cocoa flex items-center justify-center text-lg font-bold">
+            ✓
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white font-display">Blockchain proof</h3>
+            <p class="text-xs text-cream/70">Immutable smart contract</p>
+          </div>
+        </div>
+
+        {% if verification.tx_hash %}
+        <div class="space-y-4 text-xs">
+          <div>
+            <p class="text-cream/60 uppercase font-bold text-[10px] tracking-wider">Transaction Hash</p>
+            <p class="font-mono text-gold truncate text-xs mt-1 p-2 bg-black/20 rounded-xl">
+              {{ verification.tx_hash }}
+            </p>
+          </div>
+          <div class="flex justify-between items-center py-2 border-t border-cream/15">
+            <span class="text-cream/70">Block Number</span>
+            <span class="font-mono font-bold text-gold text-sm">#{{ verification.block_number }}</span>
+          </div>
+          <div class="flex justify-between items-center py-2 border-t border-cream/15">
+            <span class="text-cream/70">Verification Status</span>
+            <span class="bg-gold text-cocoa font-bold px-2.5 py-0.5 rounded-full text-xs">
+              ✓ Verified on-chain
+            </span>
+          </div>
+        </div>
+        {% else %}
+        <div class="p-4 bg-black/20 rounded-2xl text-xs text-cream/80">
+          <p class="font-semibold mb-1">Registration Pending</p>
+          <p>This batch's record is currently queued for smart contract recording.</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="pt-8 border-t border-cream/15 mt-6">
+        <a href="{% url 'traceability:search' %}" class="w-full block text-center bg-cream hover:bg-white text-cocoa font-bold text-xs py-3 rounded-full transition-all shadow-xs">
+          ← Verify another batch
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

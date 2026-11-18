@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block title %}{{ apiary.name }} | Apiary{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <div class="mb-6">
+    <a href="{% url 'apiaries:list' %}" class="text-xs font-bold text-cocoa-soft hover:text-honey-deep inline-flex items-center gap-1">
+      <span>←</span> Back to apiaries
+    </a>
+  </div>
+
+  <!-- Apiary Overview Card -->
+  <div class="bg-card border border-line rounded-4xl p-8 sm:p-10 card-shadow mb-8 relative">
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
+      <div class="flex items-start gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gold-tint border border-line/60 flex items-center justify-center shrink-0 text-2xl">
+          🏡
+        </div>
+        <div>
+          <span class="text-xs font-mono font-bold text-cocoa-soft bg-cream px-2.5 py-0.5 rounded-full border border-line">
+            AP-{{ apiary.pk|stringformat:"03d" }}
+          </span>
+          <h1 class="text-3xl font-bold text-cocoa font-display mt-1">{{ apiary.name }}</h1>
+          <p class="text-sm text-cocoa-soft mt-0.5">📍 {{ apiary.location }}</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="{% url 'apiaries:edit' apiary.pk %}" class="px-5 py-2.5 bg-cream hover:bg-white text-cocoa font-bold text-xs rounded-full border border-line transition-all">
+          Edit
+        </a>
+        <a href="{% url 'apiaries:delete' apiary.pk %}" class="px-5 py-2.5 bg-card hover:bg-red-50 text-red-500 font-bold text-xs rounded-full border border-line transition-all">
+          Delete
+        </a>
+      </div>
+    </div>
+
+    {% if apiary.description %}
+    <p class="text-sm text-cocoa-soft leading-relaxed max-w-3xl mb-8">
+      {{ apiary.description }}
+    </p>
+    {% endif %}
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-line/60">
+      <div>
+        <p class="text-xs text-cocoa-soft">Bee colonies</p>
+        <p class="text-2xl font-bold text-cocoa font-display mt-1">{{ colonies|length }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-cocoa-soft">Harvest batches</p>
+        <p class="text-2xl font-bold text-cocoa font-display mt-1">{{ batches|length }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-cocoa-soft">Beekeeper</p>
+        <p class="text-sm font-bold text-cocoa mt-2">{{ apiary.beekeeper.get_full_name|default:apiary.beekeeper.username }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-cocoa-soft">Established</p>
+        <p class="text-sm font-bold text-cocoa mt-2">{{ apiary.created_at|date:"d M Y" }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+    <!-- Colonies Section -->
+    <div class="bg-card border border-line rounded-3xl p-6 sm:p-7 card-shadow">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-line/60">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <h2 class="text-lg font-bold text-cocoa font-display">Bee colonies</h2>
+        </div>
+        <a href="{% url 'colonies:add' %}?apiary={{ apiary.pk }}" class="text-xs font-bold text-honey hover:underline">
+          + Add colony
+        </a>
+      </div>
+
+      {% if colonies %}
+      <div class="space-y-3">
+        {% for colony in colonies %}
+        <div class="p-4 rounded-2xl bg-cream/40 border border-line/60 flex items-center justify-between">
+          <div>
+            <p class="font-bold text-cocoa text-sm">{{ colony.colony_name }}</p>
+            <p class="text-xs text-cocoa-soft mt-0.5">{{ colony.colony_type }} • Est. {{ colony.establishment_date|date:"M Y" }}</p>
+          </div>
+          <span class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-gold-tint text-cocoa">
+            ● {{ colony.health_status }}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-xs text-cocoa-soft py-4 text-center">No colonies added yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Batches Section -->
+    <div class="bg-card border border-line rounded-3xl p-6 sm:p-7 card-shadow">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-line/60">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🍯</span>
+          <h2 class="text-lg font-bold text-cocoa font-display">Harvested batches</h2>
+        </div>
+        <a href="{% url 'honey:create' %}" class="text-xs font-bold text-honey hover:underline">
+          + Create batch
+        </a>
+      </div>
+
+      {% if batches %}
+      <div class="space-y-3">
+        {% for batch in batches %}
+        <a href="{% url 'honey:detail' batch.pk %}" class="p-4 rounded-2xl bg-cream/40 border border-line/60 flex items-center justify-between hover:bg-cream transition-colors block">
+          <div>
+            <p class="font-mono font-bold text-cocoa text-sm">{{ batch.batch_id }}</p>
+            <p class="text-xs text-cocoa-soft mt-0.5">{{ batch.honey_source }} • {{ batch.quantity }} kg</p>
+          </div>
+          {% if batch.is_registered_on_blockchain %}
+          <span class="text-xs font-bold bg-gold text-cocoa px-2.5 py-0.5 rounded-full">
+            ✓ Verified
+          </span>
+          {% else %}
+          <span class="text-xs font-bold bg-peach-tint text-cocoa px-2.5 py-0.5 rounded-full">
+            ⏱ Pending
+          </span>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-xs text-cocoa-soft py-4 text-center">No batches recorded from this apiary yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

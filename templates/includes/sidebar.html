@@ -1,0 +1,43 @@
+<!-- Sidebar Component for Beekeeper Dashboard & Management Views -->
+<aside class="w-64 bg-white rounded-3xl p-6 shadow-sm border border-amber-100 hidden lg:block flex-shrink-0 self-start sticky top-20">
+  <div class="flex items-center gap-3 pb-6 border-b border-amber-100">
+    <div class="w-12 h-12 bg-honey/10 text-honey rounded-2xl flex items-center justify-center text-xl font-bold">
+      🐝
+    </div>
+    <div class="overflow-hidden">
+      <h3 class="font-bold text-cocoa truncate">{{ user.get_full_name|default:user.username }}</h3>
+      <p class="text-xs text-gray-400">Beekeeper</p>
+    </div>
+  </div>
+
+  <nav class="mt-6 space-y-2">
+    <a href="{% url 'accounts:dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-colors {% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'dashboard' %}bg-honey text-white{% else %}text-cocoa hover:bg-cream{% endif %}">
+      <span>📊</span> Dashboard
+    </a>
+    <a href="{% url 'apiaries:list' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-colors {% if request.resolver_match.app_name == 'apiaries' %}bg-honey text-white{% else %}text-cocoa hover:bg-cream{% endif %}">
+      <span>🏡</span> Apiaries
+    </a>
+    <a href="{% url 'colonies:list' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-colors {% if request.resolver_match.app_name == 'colonies' %}bg-honey text-white{% else %}text-cocoa hover:bg-cream{% endif %}">
+      <span>🐝</span> Bee Colonies
+    </a>
+    <a href="{% url 'honey:list' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-colors {% if request.resolver_match.app_name == 'honey' %}bg-honey text-white{% else %}text-cocoa hover:bg-cream{% endif %}">
+      <span>🍯</span> Honey Batches
+    </a>
+    <a href="{% url 'traceability:search' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-colors {% if request.resolver_match.app_name == 'traceability' %}bg-honey text-white{% else %}text-cocoa hover:bg-cream{% endif %}">
+      <span>🔍</span> Public Traceability
+    </a>
+    <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-colors {% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'profile' %}bg-honey text-white{% else %}text-cocoa hover:bg-cream{% endif %}">
+      <span>⚙️</span> Settings & Profile
+    </a>
+  </nav>
+
+  <div class="mt-8 pt-6 border-t border-amber-100">
+    <form method="POST" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
+        <span>🚪</span> Log Out
+      </button>
+    </form>
+  </div>
+</aside>
+

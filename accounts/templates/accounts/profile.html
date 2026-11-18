@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <h1 class="text-3xl font-extrabold text-cocoa mb-6">My Profile</h1>
+
+  <div class="bg-white rounded-3xl shadow-sm border border-amber-100 p-8">
+    <div class="flex items-center gap-4 mb-8 pb-6 border-b border-amber-100">
+      <div class="w-16 h-16 bg-honey text-white rounded-full flex items-center justify-center text-2xl font-bold">
+        {{ user.first_name.0|default:user.username.0|upper }}
+      </div>
+      <div>
+        <p class="font-bold text-xl text-cocoa">{{ user.get_full_name|default:user.username }}</p>
+        <p class="text-gray-400 text-sm">{{ user.email }}</p>
+        <p class="text-gray-400 text-xs">Member since {{ user.date_joined|date:"F Y" }}</p>
+      </div>
+    </div>
+
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mb-5">
+        <label class="block text-sm font-semibold text-cocoa mb-2">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="bg-honey text-white px-8 py-3 rounded-2xl font-bold hover:bg-orange-600 transition-all">
+        Update Profile
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
